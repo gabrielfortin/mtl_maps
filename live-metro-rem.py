@@ -151,18 +151,35 @@ def getGtfsAndDraw(url: str, filename: str, modes: list):
 
 init_map()
 
-getGtfsAndDraw("https://www.stm.info/sites/default/files/gtfs/gtfs_stm.zip", "gtfs_stm.zip", modes=[3])
-getGtfsAndDraw("https://www.rtl-longueuil.qc.ca/transit/latestfeed/RTL.zip", "gtfs_rtl.zip", modes=[3])
-getGtfsAndDraw("https://www.rtm.quebec/xdata/trains/google_transit.zip", "gtfs_exo_train.zip", modes=[2])
-getGtfsAndDraw("https://www.stlaval.ca/datas/opendata/GTF_STL.zip", "gtfs_stl.zip", modes=[3])
-getGtfsAndDraw("https://www.stm.info/sites/default/files/gtfs/gtfs_stm.zip", "gtfs_stm.zip", modes=[0,1])
-draw_map("auto_data/gtfs_stm.zip", modes=[0,1])
-getGtfsAndDraw("https://gtfs.gpmmom.ca/gtfs/gtfs.zip", "gtfs_rem.zip", modes=[0,1])
+mapping = [
+    {"url": "https://www.stm.info/sites/default/files/gtfs/gtfs_stm.zip", "filename": "gtfs_stm.zip", "modes": [3], "dl": True},
+    {"url": "https://www.rtl-longueuil.qc.ca/transit/latestfeed/RTL.zip", "filename": "gtfs_rtl.zip", "modes": [3], "dl": True},
+    {"url": "https://www.rtm.quebec/xdata/trains/google_transit.zip", "filename": "gtfs_exo_train.zip", "modes": [2], "dl": True},
+    {"url": "https://www.stlaval.ca/datas/opendata/GTF_STL.zip", "filename": "gtfs_stl.zip", "modes": [3], "dl": True},
+    {"url": "https://www.stm.info/sites/default/files/gtfs/gtfs_stm.zip", "filename": "gtfs_stm.zip", "modes": [0,1], "dl": False},
+    {"url": "https://gtfs.gpmmom.ca/gtfs/gtfs.zip", "filename": "gtfs_rem.zip", "modes": [0,1], "dl": True}
+]
+mapping_exo = [
+    {"url": "https://exo.quebec/xdata/citcrc/google_transit.zip", "filename": "gtfs_exo_citcrc.zip", "modes": [3], "dl": True},
+    {"url": "https://exo.quebec/xdata/citla/google_transit.zip", "filename": "gtfs_exo_citla.zip", "modes": [3], "dl": True},
+    {"url": "https://exo.quebec/xdata/citpi/google_transit.zip", "filename": "gtfs_exo_citpi.zip", "modes": [3], "dl": True},
+    {"url": "https://exo.quebec/xdata/citrous/google_transit.zip", "filename": "gtfs_exo_citrous.zip", "modes": [3], "dl": True},
+    {"url": "https://exo.quebec/xdata/citsv/google_transit.zip", "filename": "gtfs_exo_citsv.zip", "modes": [3], "dl": True},
+    {"url": "https://exo.quebec/xdata/citso/google_transit.zip", "filename": "gtfs_exo_citso.zip", "modes": [3], "dl": True},
+    {"url": "https://exo.quebec/xdata/citvr/google_transit.zip", "filename": "gtfs_exo_citvr.zip", "modes": [3], "dl": True},
+    {"url": "https://exo.quebec/xdata/mrclasso/google_transit.zip", "filename": "gtfs_exo_mrclasso.zip", "modes": [3], "dl": True},
+    {"url": "https://exo.quebec/xdata/mrclm/google_transit.zip", "filename": "gtfs_exo_mrclm.zip", "modes": [3], "dl": True},
+    {"url": "https://exo.quebec/xdata/omitsju/google_transit.zip", "filename": "gtfs_exo_omitsju.zip", "modes": [3], "dl": True},
+    {"url": "https://exo.quebec/xdata/lrrs/google_transit.zip", "filename": "gtfs_exo_lrrs.zip", "modes": [3], "dl": True}
+]
+
+mapping = mapping + mapping_exo
+
+dl = True
+for item in mapping:
+    if item.get("dl", True) and dl is True:
+        getGtfsAndDraw(item["url"], item["filename"], item["modes"])
+    else:
+        draw_map(f"auto_data/{item['filename']}", item["modes"])
 
 m.save('live_rem_metro.html')
-
-
-#https://www.stlaval.ca/datas/opendata/GTF_STL.zip
-# https://www.rtl-longueuil.qc.ca/transit/latestfeed/RTL.zip
-#https://www.rtm.quebec/xdata/trains/google_transit.zip
-
