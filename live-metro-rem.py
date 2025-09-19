@@ -7,7 +7,7 @@ import zipfile
 from google.protobuf import json_format
 import gtfsrealtime_pb2
 
-key = "l79789d5b52fe7489284749a249188a041"
+key = ""
 
 def getTripUpdates():
     r = requests.get("https://api.stm.info/pub/od/gtfs-rt/ic/v2/tripUpdates", headers={"apiKey": f"{key}"})
