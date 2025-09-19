@@ -151,14 +151,21 @@ def getGtfsAndDraw(url: str, filename: str, modes: list):
 
 init_map()
 
-mapping = [
-    {"url": "https://www.stm.info/sites/default/files/gtfs/gtfs_stm.zip", "filename": "gtfs_stm.zip", "modes": [3], "dl": True},
-    {"url": "https://www.rtl-longueuil.qc.ca/transit/latestfeed/RTL.zip", "filename": "gtfs_rtl.zip", "modes": [3], "dl": True},
-    {"url": "https://www.rtm.quebec/xdata/trains/google_transit.zip", "filename": "gtfs_exo_train.zip", "modes": [2], "dl": True},
-    {"url": "https://www.stlaval.ca/datas/opendata/GTF_STL.zip", "filename": "gtfs_stl.zip", "modes": [3], "dl": True},
-    {"url": "https://www.stm.info/sites/default/files/gtfs/gtfs_stm.zip", "filename": "gtfs_stm.zip", "modes": [0,1], "dl": False},
+mapping_metro = [
+    {"url": "https://www.stm.info/sites/default/files/gtfs/gtfs_stm.zip", "filename": "gtfs_stm.zip", "modes": [0,1], "dl": True},
     {"url": "https://gtfs.gpmmom.ca/gtfs/gtfs.zip", "filename": "gtfs_rem.zip", "modes": [0,1], "dl": True}
 ]
+
+mapping_bus = [
+    {"url": "https://www.stm.info/sites/default/files/gtfs/gtfs_stm.zip", "filename": "gtfs_stm.zip", "modes": [3], "dl": True},
+    {"url": "https://www.rtl-longueuil.qc.ca/transit/latestfeed/RTL.zip", "filename": "gtfs_rtl.zip", "modes": [3], "dl": True},
+    {"url": "https://www.stlaval.ca/datas/opendata/GTF_STL.zip", "filename": "gtfs_stl.zip", "modes": [3], "dl": True},
+]
+
+mapping_train = [
+    {"url": "https://www.rtm.quebec/xdata/trains/google_transit.zip", "filename": "gtfs_exo_train.zip", "modes": [2], "dl": True},
+]
+
 mapping_exo = [
     {"url": "https://exo.quebec/xdata/citcrc/google_transit.zip", "filename": "gtfs_exo_citcrc.zip", "modes": [3], "dl": True},
     {"url": "https://exo.quebec/xdata/citla/google_transit.zip", "filename": "gtfs_exo_citla.zip", "modes": [3], "dl": True},
@@ -173,11 +180,12 @@ mapping_exo = [
     {"url": "https://exo.quebec/xdata/lrrs/google_transit.zip", "filename": "gtfs_exo_lrrs.zip", "modes": [3], "dl": True}
 ]
 
-mapping = mapping + mapping_exo
+mapping = mapping_bus + mapping_train + mapping_metro
+# mapping = mapping_metro
 
 dl = True
 for item in mapping:
-    if item.get("dl", True) and dl is True:
+    if item.get("dl", True) and dl is True and not os.path.exists(f"auto_data/{item['filename']}"):
         getGtfsAndDraw(item["url"], item["filename"], item["modes"])
     else:
         draw_map(f"auto_data/{item['filename']}", item["modes"])
