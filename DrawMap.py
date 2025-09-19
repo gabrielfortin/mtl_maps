@@ -91,10 +91,10 @@ def getGtfs(url: str, filename: str):
 
 m = None
 
-def init_map():
+def init_map(zoom: int = 11):
     global m
     # Centrer la carte sur Montréal
-    m = folium.Map(location=[45.5017, -73.5673], zoom_start=11, tiles='cartodbpositron')
+    m = folium.Map(location=[45.5017, -73.5673], zoom_start=zoom, tiles='cartodbpositron')
     #m = folium.Map(location=[stops['stop_lat'][0], stops['stop_lon'][0]], zoom_start=11)
 
 def draw_map(zip_path: str, modes: list):
@@ -149,7 +149,7 @@ def getGtfsAndDraw(url: str, filename: str, modes: list):
     getGtfs(url, filename)
     draw_map(f"auto_data/{filename}", modes)
 
-init_map()
+init_map(zoom=12)
 
 mapping_metro = [
     {"url": "https://www.stm.info/sites/default/files/gtfs/gtfs_stm.zip", "filename": "gtfs_stm.zip", "modes": [0,1], "dl": True},
@@ -181,7 +181,7 @@ mapping_exo = [
 ]
 
 mapping = mapping_bus + mapping_train + mapping_metro
-# mapping = mapping_metro
+mapping = mapping_metro
 
 dl = True
 for item in mapping:
