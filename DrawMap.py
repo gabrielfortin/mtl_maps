@@ -142,8 +142,29 @@ def draw_map(zip_path: str, modes: list):
             weight = 3
         else:
             continue
-        
-        folium.PolyLine(points, color=color, weight=weight, opacity=1).add_to(m)
+
+        popup = None
+        tooltip = None
+        if route_type in (0, 1, 2):
+            type_label = {0: 'Tramway / SRB', 1: 'Métro', 2: 'Train'}[route_type]
+            short = str(route['route_short_name']) if pd.notna(route['route_short_name']) else ''
+            long_name = str(route['route_long_name']) if pd.notna(route['route_long_name']) else ''
+            display_name = short or long_name or str(route_id)
+            details = f'<div style="color:#555;margin:2px 0">{long_name}</div>' if long_name and long_name != display_name else ''
+            popup_html = (
+                f'<div style="font-family:sans-serif;min-width:140px;padding:2px">'
+                f'<span style="display:inline-block;width:11px;height:11px;background:{color};'
+                f'border-radius:50%;margin-right:6px;vertical-align:middle"></span>'
+                f'<b style="font-size:14px">{display_name}</b>'
+                f'{details}'
+                f'<div style="color:#999;font-size:11px;margin-top:3px">{type_label}</div>'
+                f'</div>'
+            )
+            popup = folium.Popup(popup_html, max_width=250)
+            tooltip = display_name
+
+        folium.PolyLine(points, color=color, weight=weight, opacity=1,
+                        popup=popup, tooltip=tooltip).add_to(m)
 
 def getGtfsAndDraw(url: str, filename: str, modes: list):
     getGtfs(url, filename)
@@ -180,7 +201,7 @@ mapping_exo = [
     {"url": "https://exo.quebec/xdata/lrrs/google_transit.zip", "filename": "gtfs_exo_lrrs.zip", "modes": [3], "dl": True}
 ]
 
-mapping = mapping_bus + mapping_train + mapping_metro
+mapping = mapping_bus + mapping_train + mapping_metro + mapping_exo
 mapping = mapping_metro
 
 dl = True
