@@ -116,10 +116,10 @@ def draw_map(zip_path: str, modes: list):
         lines['route_id'] = lines['route_id'].astype(int)
         lines.loc[lines['route_id'] == 439, 'route_type'] = 0
 
-    # If GPMMOM change S2 to metro
+    # If GPMMOM change S1, S2, S3 to metro
     if 'gtfs_rem' in zip_path:
         trips['route_id'] = trips['route_id'].astype(str)
-        lines.loc[lines['route_id'] == "S2", 'route_type'] = 1
+        lines.loc[lines['route_id'].isin(["S1", "S2", "S3"]), 'route_type'] = 1
 
     # Draw lines for metro and tram
     shape_ids = trips['shape_id'].unique()
